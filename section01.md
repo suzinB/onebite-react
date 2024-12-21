@@ -6,6 +6,10 @@
 * [자료형(타입)](#자료형타입)
 * [형 변환(Type Casting)](#형-변환type-casting)
 * [연산자(Operator)](#연산자Operator)
+* [조건문](#조건문)
+* [반복문(Loop, Iteration)](#반복문Loop,Iteration)
+* [함수](#함수)
+* [함수 표현식과 화살표 함수](#함수-표현식과-화살표-함수)
 
 ---
 
@@ -239,42 +243,317 @@ console.log(numToStr1 + "입니다."); // 20입니다.
 - 전위 연산(`++변수`), 후위 연산(`변수++`)
 - 모든 산술 연산자로 사용 가능함
 
-5. 논리 연산자
-: Boolean 타입(true, false) 타입의 값을 다룰때 사용하는 연산자
+5. 논리 연산자  
+: Boolean 타입(true, false) 타입의 값을 다룰때 사용하는 연산자  
+   1. Or 연산자  
+   : 값이 하나만 참이어도 참이 됨  
+   `let or = true || false; // true`
+   2. And 연산자  
+   : 양쪽이 다 참이어야 참이 됨
+   `let and = true && false; // false`
+   3. Not 연산자  
+   : 참이라면 거짓, 거짓이라면 참으로 변경됨
+   `let not = !true; // false`
+
+6. 비교 연산자  
+: 2개의 값을 서로 비교하는 연산자
+   * 동등 비교 연산자  
+  `let comp1 = 1 === 2; //false`
+   * 비동등 비교 연산자  
+  `let comp2 = 1 !== 2; //true`  
+      * 왜 `===` 3개를 쓰는가?  
+        : 2개`==`만 쓰면 자료형까지 같은지는 비교할 수 없기 때문에, 자료형이 다를때는 다른 값으로 보기때문에 3개`===`를 쓰는게 권장되는 방식임!
+   * 대소 비교 : `>`, `<`, `>=`, `<=`
 
 
+7. null 병합 연산자  
+: 존재하는 값을 추려내는 기능으로 null이나 undefined를 제외한 것들을 찾아내는 연산자
+```javascript
+let var1;
+let var2 = 10;
+let var3 = 20;
+let var4 = var1 ?? var2; 
+console.log(var4); // 10
+```
+ㄴ var1은 초기화가 되지않은 undefined, var2는 초기화가 된 값이므로  
+null병합 연산자`??`가 이 두 피연산자(연산에 참여하는 값) 중 undefined가 아닌 var2의 값을 찾아서 var4에 대입
+```javascript
+let var5 = var2 ?? var3; 
+console.log(var5); // 10
+```
+ㄴ 두 피연산자가 둘다 null이나 undefined가 아니다라고 하면 처음에 적힌 값이 반환됨
+
+* 실무에서 쓰이는 방법  
+ : 회원 관리 시스템에서 userName이 있다면 userName을 displayName으로 저장, 없다면 userNickName을 저장해라
+```javascript
+let userName = "백수진";
+let userNickName = "suzin"
+let displayName = userName ?? userNickName; 
+```
+
+<br>
+
+8. typeof 연산자  
+: 값의 타입을 문자열로 반환하는 기능을 하는 연산자
+```javascript
+var7 = "hello";
+let t1 = typeof var7;
+console.log(t1); // boolean
+```
 
 
-
+9. 삼항 연산자  
+: 3개의 항을 사용해 조건식을 이용해서 `참`이나 `거짓`일 때의 값을 반환  
+`조건식` ? `참일때값` : `거짓일때값`
+```javascript
+// 요구사항 : 변수 res에 var8의 값이 짝수일때는 "짝수", 홀수일대는 "홀수"를 저장해라
+let var8 = 10;
+let res = var8 % 2 === 0 ? "짝수" : "홀수";
+console.log(res); // 짝수
+```
 
 <br>
 
 ## 조건문
+### 조건문(Condetional Statement)이란?
+ - 특정 조건을 만족했을 때에만 실행되는 코드를 작성하기 위한 문법
+- 대표적인 조건문 : if, switch
+  * 복잡한 여러개의 조건을 이용하고 싶을때는 if문
+  * 어떠한 변수의 값을 기준으로 각각 다른 코드를 실행시키고 싶을때는 switch문
+
+1. if 조건문(if문)
+- if로 시작해서 else로 끝나야함
+```javascript
+if(조건식){
+  //조건식이 만족했을때 수행할 코드
+}else if(조건식){ // 그 다음 조건식
+  //조건식이 만족했을때 수행할 코드
+}else{ //그렇지 않으면 이라는 뜻
+  // 조건이 거짓일때 수행할 코드
+}
+```
+
+2. switch 조건문
+- 기능 자체는 if문과 동일하게 조건에 따라 다른 코드를 실행할 수 있게 도와줌
+- 다수의 조건을 처리할때 if문보다 더 직관적
+- 변수의 값과 일치하는 케이스를 위에서부터 아래로 차례대로 탐색하다가 일치하는 케이스를 만나면 그 아래에 있는 모든 코드를 다 수행시켜줌
+- 일치하는 케이스에서 맞추려면 `break;`
+- 예외 케이스는 `default:`
+```javascript
+let animal = "owl";
+switch (animal){
+  case "cat" : {
+    console.log("고양이");
+    break;
+  }
+  case "dog" :{
+    console.log("강아지");
+    break;
+  }
+  case "bear" :{
+    console.log("곰");
+    break;
+  }
+  case "snake" :{
+    console.log("뱀");
+    break;
+  }
+  case "tiger" :{
+    console.log("호랑이");
+    break;
+  }
+  default:{
+    console.log(animal+"은 모릅니다")
+  }
+}
+```
 
 <br>
 
-## 반복문
-
+## 반복문(Loop, Iteration)  
+: 어떠한 동작을 반복해서 수행할 수 있도록 만들어 주는 문법 
+* for문
+   * 초기식 : 반복문 내에서 만 쓸 수 있는 변수. counter 변수라고도 불림
+   * 조건식 : 반복문이 언제까지 반복할 건지 설정하는 식 - 참일때에만 계속 반복 되고 거짓이 되면 종료가 됨
+   * 증감식 : 한번의 반복이 종료될때마다 증감시키는 식, 증감연산자를 이용함
+```javascript
+for (초기식; 조건식; 증감식){
+  반복할 코드
+}
+```
+* continue  
+: 반복문 내에서 다른 코드들을 실행하지 ㅇ낳고 바로 다음 반복회차로 넘어감
+```javascript
+for (let idx = 1; idx < 10; idx++){
+  if(idx % 2 === 0){
+    continue;
+  }
+  console.log(idx);
+}
+// 1
+// 3
+// 5
+// 7
+```
+* break  
+: 조건식이 거짓이 되지 않았을때에도 강제로 종료하는 방법 (조건식을 바꿀 수 없을 때)
+```javascript
+for (let idx = 1; idx < 10; idx++){
+  if(idx > 3){
+    break;
+  }
+  console.log(idx);
+}
+// 1
+// 2
+// 3
+```
 <br>
 
 ## 함수
+1. 함수를 사용하는 이유
+- 중복된 코드를 코드를 재사용(한 번 정의 후 여러번 사용)할 수 있다
+- 다른 인자를 사용하여 동일한 코드를 사용하고 다른 결과를 도출할 수 있다.
+
+2. 함수의 특징
+- 함수가 값이기 때문에 변수 안에 담길 수 있다.
+- 객체의 속성안에 method로 담길 수 있다.
+- 다른 함수의 인자값을 전달할 수 있다.
+- 함수의 return값으로도 사용할 수 있다.
+- 배열의 값으로도 사용할 수 있다.
+
+3. 함수 선언 및 호출
+```javascript
+// 1. 함수 선언
+function 함수명(){
+  // 실행할 코드
+}
+
+// 2. 함수 호출
+// 함수를 호출할 때에는 소괄호()와 함께 호출
+greeting();
+```
+4. 동적인 함수 생성  
+* 함수를 호출하면서 함수에게 전달하는 값을 **인수**라고 함
+* 소괄호()안에 함수의 변수를 선언해 전달된 인수들을 순서대로 저장하는 변수들을 **매개변수**라고 함
+
+* `return`: 함수 호출의 결과 값으로 return문을 만나면 함수는 값을 반환하고 종료되어 하위 코드들은 수행되지 않음
+```javascript
+function getArea(width, height){
+  let area = width * height;
+  return area;
+}
+let area1 = getArea(10,20);
+console.log(area1); // 200
+```
+* 중첩함수 : 함수 내부에 선언된 함수
+```javascript
+function getArea(width, height){
+  function another(){ //중첩 함수
+    consoel.log("another");
+  }
+  let area = width * height;
+  return area;
+}
+```
+<br>
+
+5. Javascript 함수 호이스팅  
+- 함수의 선언을 함수의 호출보다 아래에 두어도 문제없이 잘 수행됨
+- 호이스팅이라는 건 우리말로 `끌어올리다`라는 뜻을 같고 있음
+- 함수 선언이 무조건 위에 있지 않아도 되기 때문에 좀 더 유연하게 프로그래밍 할 수 있음
 
 <br>
 
 ## 함수 표현식과 화살표 함수
+### 함수 표현식
+1. 함수 선언
+* 호이스팅 됨
+* 자바스크립트에서는 함수도 하나의 값으로 취급
+```javascript
+function funcA(){
+  console.log("funcA 호출함");
+}
+
+let varA = funcA;
+console.log(varA); // 함수 자체를 변수 선언함. 
+
+// function funcA(){
+//   console.log("funcA 호출함");
+// }
+```
+* 함수를 어떤 변수에 담게 되면 이 변수의 이름으로 함수를 호출할 수 있음
+```javascript
+varA();
+
+// funcA 호출함
+```
+
+2. 익명함수(이름이 없다)
+* 호이스팅 되지 않음
+```javascript
+let varB = function funcB(){ // 함수를 만들자마자 바로 변수에 담는것도 가능
+  console.log("funcB 호출함");
+}
+varB();
+
+//funcB 호출함
+```
+* funcB의 경우 선언식이 아니라 값으로 함수가 생성된 것이기 때문에 함수의 이름으로 호출 불가 `funcB();`로 선언하면 오류남
+* 결국 funcB라는 함수로 부르지 못하기때문에 funcB를 생략할 수 있음
+```javascript
+let varB = function (){ // 함수를 만들자마자 바로 변수에 담는것도 가능
+  console.log("funcB 호출함");
+}
+```
+
+### 화살표 함수
+* 함수를 이전보다 더 빠르고 간결하게 생성해 줄 수 있도록 도와주는 JavaScript 문법
+* 익명함수에서 function을 지우고 소괄호와 중괄호 사이에 화살표를 넣어줌
+```javascript
+let varC = () => {
+  return 1;
+}
+```
+* 여기서 더 간결하게 만들 수도 있음
+* 그냥 값을 반환하기만 하는 함수라면 중괄호랑 return문도 지워주면 됨
+```javascript
+let varC = () => 1;
+console.log(varC()); // 1
+```
+* 소괄호 안에 매개변수 선언도 가능
+```javascript
+let varD = (value) => value + 10;
+console.log(varD(10)); // 20
+```
+* 익명함수에서 추가적인 작업이 더 필요하다면 중괄호`{}`를 이용해 가능
+```javascript
+let varE = (value) => {
+  console.log(value);
+  return value++;
+}
+console.log(varE(10));
+// 10
+// 11
+```
 
 <br>
 
 ## 콜백함수
-
+```javascript
+```
 <br>
 
 ## 스코프
-
+```javascript
+```
 <br>
 
 ## 객체
-
+```javascript
+```
 <br>
 
 ## 배열
+```javascript
+```

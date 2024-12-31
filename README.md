@@ -6,5 +6,6 @@
 ---
 
 ### 📝 강의 노트
-[Section01. JavaScript 기본](./section01.md)
-[Section02. JavaScript 심화](./section02.md)
+[Section01. JavaScript 기본](./section01.md)  
+[Section02. JavaScript 심화](./section02.md)  
+[Section03. Node.js 기초](./section03.md)  

@@ -10,7 +10,10 @@
 * [반복문(Loop, Iteration)](#반복문Loop,Iteration)
 * [함수](#함수)
 * [함수 표현식과 화살표 함수](#함수-표현식과-화살표-함수)
-
+* [콜백함수](#콜백함수)
+* [스코프](#스코프)
+* [객체](#객체)
+* [배열](#배열)
 ---
 
 ## JavaScript
@@ -540,12 +543,130 @@ console.log(varE(10));
 <br>
 
 ## 콜백함수
+### 1. 콜백 함수(Callback Function)란? `callback()`
+- 자신이 아닌 다른 함수에, 인수로 전달된 **함수**를 의미
+- 매개변수에 함수를 전달해 일회용으로 사용하기 때문에 함수의 이름을 명시할 필요가 없어 `익명함수` 형태로 넣어줌, 더 간결하게 `화살표 함수` 형태로 정의해 사용
+- callback은 프로그래밍에서 "뒷전에 실행되는" 또는 "나중에 실행되는" 뜻으로 쓰임
+
+일반함수
 ```javascript
+function main(value){
+  value(); // 함수를 매개변수로 받기 때문에 호출
+}
+
+function sub(){
+  console.log("I am sub");
+}
+
+main(sub); // I am sub
 ```
+
+함수 표현식
+```javascript
+function main(value){
+  value(); 
+}
+
+main(function sub(){
+  console.log("I am sub");
+}); // I am sub
+```
+
+익명 함수
+```javascript
+function main(value){
+  value(); 
+}
+
+main(function (){
+  console.log("I am sub");
+}); // I am sub
+```
+
+화살표 함수
+```javascript
+function main(value){
+  value(); 
+}
+
+main(() => {
+  console.log("I am sub");
+}); // I am sub
+```
+### 2. 콜백함수의 활용
+- 프로그래밍을 하다보면 구조가 거의 흡사한 함수들을 만들게 되는데 중복코드를 발생시키지 않으면서 코드를 크게 개선할 수 있음  
+
+기존 코드
+```javascript
+function repeat(count){
+  for(let idx = 1; idx <= count; idx++){
+    console.log(idx);
+  }
+}
+
+function repeatDouble(count){
+  for(let idx = 1; idx <= count; idx++){
+    console.log(idx*2);
+  }
+}
+
+repeat(5);
+repeatDouble(5);
+```
+
+콜백 함수 사용
+```javascript
+function repeat(count, callback){ // callback이라는 매개 변수를 받게하고
+  for(let idx = 1; idx <= count; idx++){
+    callback(idx); // callback함수를 호출
+  }
+}
+
+repeat(5, function(idx){
+  console.log(idx);
+});
+
+repeat(5, function(idx){
+  console.log(idx*2);
+}); // repeatDouble 함수
+```
+
+화살표 함수로 변경
+```javascript
+repeat(5, (idx) => {
+  console.log(idx);
+});
+
+repeat(5, (idx) => {
+  console.log(idx*2);
+});
+```
+
 <br>
 
-## 스코프
+## 스코프(Scope)
+### 스코프(Scope)란?
+- 우리말로 "범위"를 뜻함
+- 변수나 함수에 접근하거나 호출할 수 있는 범위를 말함
+- 자바스크립테서 함수를 선언할때마다 새로운 스코프를 생성
+
+### 스코프 종류
+#### 1. 전역 스코프(Global Scope)
+ - 전체 영역에서 접근 가능
+
+#### 2. 지역 스코프(Global Scope)
+- 특정 영역에서만 접근 가능
+- 반복문이나 조건문 또는 함수처럼 중괄호 안(블록)에 선언된 변수들은 지역 스코프를 갖음
 ```javascript
+let a = 1; // 전역 스코프
+function funcA(){
+  let b = 2; // 지역 스코프
+  console.log(a);
+}
+
+funcA();
+console.log(b);
+// Uncaught ReferenceError: b is not defined (b를 찾을 수 없음)
 ```
 <br>
 

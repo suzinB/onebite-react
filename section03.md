@@ -77,11 +77,133 @@
 <br>
 
 ## Node.js 모듈 시스템 이해하기
+### 모듈 시스템(Module System)이란?
+- 모듈(Module) : 기능별로 나뉘어진 이런 각각의 자바스크립트 파일들
+- 모듈을 생성하고, 불러오고, 사용하는 등의 모듈을 다루는 다양한 기능을 제공하는 시스템
+- JavaScript의 모듈 시스템 : **Common JS(CJS)**, **ES Module(ESM)**, AMD, UDM...
+
+### Common JS(CJS)
+- 모듈로부터 특정 값을 내보내고 또 다른 모듈에서 Require로 불러와서 내보내진 값들을 이용할 수 있는 모듈 시스템
+
+`math.js`  
+: 계산기능이 있는 js파일 = math 모듈  
+: module이라는 객체 안에 각각 프로퍼티로 내보내고 싶은 값들을 넣어줌  
+: value값으로 사용되는 변수의 이름과 키 값이 똑같을 경우에는 변수나 함수의 이름만 명시 가능
 ```javascript
+function add(a, b){
+  return a + b;
+}
+
+function sub(a, b){
+  return a - b;
+}
+
+module.exports = {
+  add, // === add: add,
+  sub, // === sub: sub,
+}
+```
+`index.js`  
+: math 모듈로부터 add(), sub()를 내보내서 index모듈이 사용할 수 있게 해주자
+```javascript
+// 내장함수인 require가 현재 경로의 math모듈로부터 객체 형태로 내보내진 값을 반환해줌
+const moduleData = require("./math");
+console.log(moduleData.add(1,2));
+console.log(moduleData.sub(1,2));
+console.log(moduleData);
+```
+`객체의 구조모듈할당`
+```javascript
+const { add, sub } = require("./math");
+
+console.log(add(1,2));
+console.log(sub(1,2));
+```
+
+### ESM(ES 모듈 시스템)
+- Common JS보다 최신식으로 동작하고 React에서 사용되는 모듈 시스템
+- `package.json`의 마지막에 `"type": "module"` 설정(해당 패키지에서 ES 모듈 시스템을 쓰겠다라는 설정을 해줘야함)
+- CommonJS 모듈 시스템과 함께 사용할 수 없다
+
+<br>
+
+**math.js**  
+: 모듈로부터 어떠한 값을 내보낼때 export라는 키워드 뒤에 객체를 리터럴로 생성해 내보내고 싶은 값을 담아주면 된다  
+: 모듈의 확장자까지 꼭 적어줘야한다!
+```javascript
+function add(a, b){
+  return a + b;
+}
+
+function sub(a, b){
+  return a - b;
+}
+
+export { add, sub };
+```
+**index.js**  
+```javascript
+import {add, sub} from "./math.js";
+```
+**함수 선언문 앞에다가 export 선언도 가능**
+```javascript
+export function add(a, b){
+  return a + b;
+}
+
+export function sub(a, b){
+  return a - b;
+}
+```
+**export default**  
+: 모듈을 대표하는 디폴트 값을 내보내는 방법  
+: import로 불러올때 중괄호 없이 내보낼 수 있다
+: 불러올때 이름을 다르게 설정 가능
+```javascript
+// math.js
+export default function multiply(a, b){
+  return a * b;
+}
+
+// index.js
+import mul from "./math.js";
+```
+**동일한 경로로부터 값을 불러오는 여러개의 임프트문은 합치기 가능**
+```javascript
+import mul, {add, sub} from "./math.js";
 ```
 <br>
 
 ## Node.js 라이브러리 사용하기
-```javascript
+### 라이브러리란?
+- 프로그램을 개발할 때 필요한 다양한 기능들을 미리 만들어 모듈화 해 놓은 것
+- [npmjs.com](#npmjs.com) : Node.js 라이브러리계의 백화점
+
+**[randomcolor](#https://www.npmjs.com/package/randomcolor)** 라이브러리 설치 및 실습
+- 우측 상단에 `Install`에 있는 문구를 터미널에 입력해서 설치
+```bash
+npm i randomcolor
 ```
-<br>
+- 설치가 완료되면
+  1. `package.json`에 "dependencies"라는 항목 추가됨  
+  : dependencies는 의존이라는 뜻, 어떠한 라이브러리를 설치했고 설치된 버전을 보여줌
+```javascript
+"dependencies": {
+  "randomcolor": "^0.6.2"
+}
+```
+  2. `package-lock.json`파일 생성됨  
+  : 해당 패키지가 사용하고 있는 라이브러리들의 버전이나 정보를 package.json보다 정확하고 엄밀하게 저장하는 파일
+  3. `/node_modules/`폴더 생성됨  
+  : 설치한 라이브러리가 실제로 저장되는 곳 
+
+**라이브러리 사용하기**  
+`import {라이브러리의 기본값} from "{라이브러리명}`
+```javascript
+import randomColor from "randomcolor";
+const color = randomColor();
+console.log(color);
+```
+- node_modules와 package-lock.json이 삭제되면 오류가 발생 ->  
+ `npm install` or `npm i`  
+: package.json의 dependencies의 정보를 기준으로 모든 라이브러리를 다시 다 설치해 줌. 그렇기때문에 누군가와 공유할때 node_modules 폴더는 삭제하고 공유해도됨!

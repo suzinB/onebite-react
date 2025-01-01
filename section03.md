@@ -85,7 +85,7 @@
 ### Common JS(CJS)
 - 모듈로부터 특정 값을 내보내고 또 다른 모듈에서 Require로 불러와서 내보내진 값들을 이용할 수 있는 모듈 시스템
 
-`math.js`  
+**math.js**  
 : 계산기능이 있는 js파일 = math 모듈  
 : module이라는 객체 안에 각각 프로퍼티로 내보내고 싶은 값들을 넣어줌  
 : value값으로 사용되는 변수의 이름과 키 값이 똑같을 경우에는 변수나 함수의 이름만 명시 가능
@@ -103,7 +103,7 @@ module.exports = {
   sub, // === sub: sub,
 }
 ```
-`index.js`  
+**index.js**  
 : math 모듈로부터 add(), sub()를 내보내서 index모듈이 사용할 수 있게 해주자
 ```javascript
 // 내장함수인 require가 현재 경로의 math모듈로부터 객체 형태로 내보내진 값을 반환해줌
@@ -112,7 +112,7 @@ console.log(moduleData.add(1,2));
 console.log(moduleData.sub(1,2));
 console.log(moduleData);
 ```
-`객체의 구조모듈할당`
+**객체의 구조모듈할당**
 ```javascript
 const { add, sub } = require("./math");
 
@@ -177,9 +177,9 @@ import mul, {add, sub} from "./math.js";
 ## Node.js 라이브러리 사용하기
 ### 라이브러리란?
 - 프로그램을 개발할 때 필요한 다양한 기능들을 미리 만들어 모듈화 해 놓은 것
-- [npmjs.com](#npmjs.com) : Node.js 라이브러리계의 백화점
+- [npmjs.com](#https://www.npmjs.com/) : Node.js 라이브러리계의 백화점
 
-**[randomcolor](#https://www.npmjs.com/package/randomcolor)** 라이브러리 설치 및 실습
+**[randomcolor](#https://www.npmjs.com/package/randomcolor) 라이브러리 설치 및 실습**
 - 우측 상단에 `Install`에 있는 문구를 터미널에 입력해서 설치
 ```bash
 npm i randomcolor
@@ -206,4 +206,4 @@ console.log(color);
 ```
 - node_modules와 package-lock.json이 삭제되면 오류가 발생 ->  
  `npm install` or `npm i`  
-: package.json의 dependencies의 정보를 기준으로 모든 라이브러리를 다시 다 설치해 줌. 그렇기때문에 누군가와 공유할때 node_modules 폴더는 삭제하고 공유해도됨!
+: package.json의 dependencies의 정보를 기준으로 모든 라이브러리를 다시 다 설치해 줌. 누군가와 공유할때 node_modules 폴더는 삭제하고 공유해도 됨!

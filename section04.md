@@ -158,7 +158,4 @@ createRoot(document.getElementById('root')).render(
 - `app.jsx`에는 App() 함수가 html 태그들을 return하고 있음
   - React에서는 HTML 태그들을 리턴하는 함수를 컴포넌트라고 부름.
 
-
-```javascript
-```
 <br>
